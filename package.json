@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "solve": "node src/index.js"
+    "solve": "node src/index.js",
+    "new-day": "node src/new-day.js"
   },
   "devDependencies": {
     "eslint": "^8.28.0",
