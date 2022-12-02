@@ -1,9 +1,8 @@
-const fs = require("fs");
 const inquirer = require("inquirer");
 const { dirs, files } = require("./utils/fs");
 const { capitalize } = require("./utils/string");
 
-if (require.main === module) {
+function ask() {
   const days = dirs(__dirname, /^day\d+/).map(({ name: dirName }) => ({
     name: `${capitalize(dirName.substring(0, 3))} ${parseInt(
       dirName.substring(3)
@@ -18,6 +17,7 @@ if (require.main === module) {
         name: "day",
         message: "Which day?",
         choices: days,
+        default: days.length - 1,
       },
     ])
     .then(({ day }) => {
@@ -35,12 +35,29 @@ if (require.main === module) {
             type: "list",
             name: "part",
             message: "Which part?",
-            choices: parts,
+            choices: [
+              ...parts,
+              new inquirer.Separator(),
+              { name: "Change day", value: "back" },
+            ],
+            default: parts.length - 1,
           },
         ])
         .then(({ part }) => {
-          const solution = require(`${dayDir}/${part}`).solve();
-          console.log(`The solution is: ${solution}`);
+          if (part === "back") {
+            ask();
+          } else {
+            const solution = require(`${dayDir}/${part}`).solve();
+            console.log(
+              "\033[42m The solution is: \033[1m" +
+                solution +
+                "\033[21;24m \033[0m"
+            );
+          }
         });
     });
+}
+
+if (require.main === module) {
+  ask();
 }

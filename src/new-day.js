@@ -21,7 +21,7 @@ if (require.main === module) {
   const files = {
     "example-input.txt": "",
     "input.txt": "",
-    "input.js": "",
+    "input.js": fs.readFileSync(`${__dirname}/stubs/input.js`),
     "part01.js": fs.readFileSync(`${__dirname}/stubs/part.js`),
   };
   Object.entries(files).forEach(([file, data]) => {
