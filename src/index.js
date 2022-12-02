@@ -2,6 +2,11 @@ const inquirer = require("inquirer");
 const { dirs, files } = require("./utils/fs");
 const { capitalize } = require("./utils/string");
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder#remainder_with_negative_dividend
+Number.prototype.mod = function (n) {
+  return ((this % n) + n) % n;
+};
+
 function ask() {
   const days = dirs(__dirname, /^day\d+/).map(({ name: dirName }) => ({
     name: `${capitalize(dirName.substring(0, 3))} ${parseInt(
