@@ -22,12 +22,6 @@ function ask() {
     ])
     .then(({ day }) => {
       const dayDir = `${__dirname}/${day}`;
-      const parts = files(dayDir, /^part\d+/).map(({ name: fileName }) => ({
-        name: `${capitalize(fileName.substring(0, 4))} ${parseInt(
-          fileName.substring(4)
-        )}`,
-        value: fileName,
-      }));
 
       inquirer
         .prompt([
@@ -36,18 +30,19 @@ function ask() {
             name: "part",
             message: "Which part?",
             choices: [
-              ...parts,
+              { name: "Part 01", value: "part1" },
+              { name: "Part 02", value: "part2" },
               new inquirer.Separator(),
               { name: "Change day", value: "back" },
             ],
-            default: parts.length - 1,
+            default: 1,
           },
         ])
         .then(({ part }) => {
           if (part === "back") {
             ask();
           } else {
-            const solution = require(`${dayDir}/${part}`).solve();
+            const solution = require(`${dayDir}`)[part]();
             console.log(
               "\033[42m The solution is: \033[1m" +
                 solution +

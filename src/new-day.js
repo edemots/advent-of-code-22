@@ -20,9 +20,9 @@ if (require.main === module) {
   fs.mkdirSync(dayDir, { recursive: true, mode: 0o755 });
   const files = {
     "example-input.txt": "",
-    "input.txt": "",
+    "index.js": fs.readFileSync(`${__dirname}/stubs/index.js`),
     "input.js": fs.readFileSync(`${__dirname}/stubs/input.js`),
-    "part01.js": fs.readFileSync(`${__dirname}/stubs/part.js`),
+    "input.txt": "",
   };
   Object.entries(files).forEach(([file, data]) => {
     const filePath = `${dayDir}/${file}`;

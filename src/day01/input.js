@@ -9,4 +9,4 @@ const cleanInput = (inputPath) =>
     )
   );
 
-module.exports = cleanInput;
+module.exports = { cleanInput };
