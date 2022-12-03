@@ -6,7 +6,7 @@ const todaysDay = new Intl.DateTimeFormat("fr-FR", { day: "2-digit" }).format(
 );
 
 if (require.main === module) {
-  const dayDir = `${__dirname}/day02`;
+  const dayDir = `${__dirname}/day${todaysDay}`;
   if (fs.existsSync(dayDir)) {
     console.log("Come back tomorrow");
     return;
