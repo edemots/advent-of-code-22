@@ -1,4 +1,5 @@
 const { sum } = require("../utils/array");
+const { mod } = require("../utils/number");
 const { cleanInput } = require("./input");
 
 function solve() {
@@ -25,7 +26,7 @@ function solve() {
          *      lose against Scissors: 2 (Paper) + 0 (lose) = 2
          *      win against Paper: 3 (Scissors) + 6 (win) = 9
          */
-        (opponentMove + expectedOutcome).mod(3) + 1 + (expectedOutcome - 1) * 3
+        mod(opponentMove + expectedOutcome, 3) + 1 + (expectedOutcome - 1) * 3
     )
   );
 }

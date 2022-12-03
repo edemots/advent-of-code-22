@@ -1,7 +1,23 @@
 /**
  *
- * @param {string} separator
- * @param {string[]} haystack
+ * @param {any[]} array
+ * @param {number} size
+ * @returns {any[][]}
+ */
+const chunk = (array, size = 1) => {
+  let i = 0;
+  const chunks = [];
+  for (i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+};
+
+/**
+ *
+ * @param {any} separator
+ * @param {any[]} haystack
+ * @returns {any[][]}
  */
 const chunkBy = (separator, haystack) => {
   const chunks = [];
@@ -19,7 +35,7 @@ const chunkBy = (separator, haystack) => {
 /**
  *
  * @param {number[]} values
- * @returns number
+ * @returns {number}
  */
 const sum = (values) => values.reduce((acc, value) => acc + value, 0);
 
@@ -27,7 +43,7 @@ const sum = (values) => values.reduce((acc, value) => acc + value, 0);
  *
  * @param {number[]} values
  * @param {number} amount
- * @returns number|number[]
+ * @returns {number|number[]}
  */
 const max = (values, amount = 1) => {
   const maximums = sort(values, "desc").slice(0, amount);
@@ -39,7 +55,7 @@ const max = (values, amount = 1) => {
  *
  * @param {number[]} values
  * @param {"asc"|"desc"} order
- * @returns number[]
+ * @returns {number[]}
  */
 const sort = (values, order = "asc") => {
   if (!["asc", "desc"].includes(order))
@@ -48,4 +64,16 @@ const sort = (values, order = "asc") => {
   return values.sort((a, b) => (order === "asc" ? a - b : b - a));
 };
 
-module.exports = { chunkBy, max, sum };
+/**
+ *
+ * @param {any[]} array1
+ * @param {any[]} array2
+ * @returns {Set<any>}
+ */
+const intersect = (...arrays) => {
+  const [array1, ...rest] = arrays;
+  const sets = rest.map((array) => new Set(array));
+  return new Set(array1.filter((i) => sets.every((s) => s.has(i))));
+};
+
+module.exports = { chunk, chunkBy, intersect, max, sort, sum };

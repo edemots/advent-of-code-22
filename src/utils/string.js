@@ -1,7 +1,7 @@
 /**
  *
  * @param {string} str
- * @returns
+ * @returns {string}
  */
 const capitalize = (str) =>
   str
@@ -9,4 +9,11 @@ const capitalize = (str) =>
     .map((w) => w[0].toUpperCase() + w.substring(1))
     .join(" ");
 
-module.exports = { capitalize };
+/**
+ *
+ * @param {char} c
+ * @returns {number}
+ */
+const ord = (c) => c.charCodeAt();
+
+module.exports = { capitalize, ord };

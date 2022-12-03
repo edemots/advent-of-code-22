@@ -1,4 +1,5 @@
 const { sum } = require("../utils/array");
+const { mod } = require("../utils/number");
 const { cleanInput } = require("./input");
 
 function solve() {
@@ -29,7 +30,7 @@ function solve() {
          *      myMove + 3 => draw
          *      myMove + 0 => lose
          */
-        myMove + (myMove - opponentMove + 1).mod(3) * 3
+        myMove + mod(myMove - opponentMove + 1, 3) * 3
     )
   );
 }
