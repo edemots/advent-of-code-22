@@ -42,11 +42,15 @@ function ask() {
           if (part === "back") {
             ask();
           } else {
+            const p1 = performance.now();
             const solution = require(`${dayDir}`)[part]();
+            const p2 = performance.now();
             console.log(
               "\033[42m The solution is: \033[1m" +
                 solution +
-                "\033[21;24m \033[0m"
+                "\033[22m" +
+                ` (took ${Math.ceil((p2 - p1) * 100) / 100} ms) ` +
+                "\033[0m"
             );
 
             inquirer
