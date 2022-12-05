@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const { dirs, files } = require("./utils/fs");
+const { dirs } = require("./utils/fs");
 const { capitalize } = require("./utils/string");
 
 function ask() {

@@ -16,4 +16,17 @@ const capitalize = (str) =>
  */
 const ord = (c) => c.charCodeAt();
 
-module.exports = { capitalize, ord };
+/**
+ * @param {string} s
+ * @param {number} n
+ * @returns string[]
+ */
+const chunk = (s, n) => s.match(new RegExp(".{1," + n + "}", "g"));
+
+/**
+ * @param {string} s
+ * @returns number[]
+ */
+const ints = (s) => s.match(/\d+/g).map((digit) => parseInt(digit));
+
+module.exports = { capitalize, chunk, ints, ord };
