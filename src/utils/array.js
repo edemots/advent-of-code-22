@@ -42,6 +42,14 @@ const sum = (values) => values.reduce((acc, value) => acc + value, 0);
 /**
  *
  * @param {number[]} values
+ * @returns {number}
+ */
+const sumIf = (values, condition = (value) => value) =>
+  sum(values.filter(condition));
+
+/**
+ *
+ * @param {number[]} values
  * @param {number} amount
  * @returns {number|number[]}
  */
@@ -49,6 +57,18 @@ const max = (values, amount = 1) => {
   const maximums = sort(values, "desc").slice(0, amount);
 
   return maximums.length > 1 ? maximums : maximums[0];
+};
+
+/**
+ *
+ * @param {number[]} values
+ * @param {number} amount
+ * @returns {number|number[]}
+ */
+const min = (values, amount = 1) => {
+  const minimums = sort(values, "asc").slice(0, amount);
+
+  return minimums.length > 1 ? minimums : minimums[0];
 };
 
 /**
@@ -76,4 +96,23 @@ const intersect = (...arrays) => {
   return new Set(array1.filter((i) => sets.every((s) => s.has(i))));
 };
 
-module.exports = { chunk, chunkBy, intersect, max, sort, sum };
+const prefix = (array) =>
+  array.reduce(
+    (prev, curr, index, array) => [
+      ...prev,
+      (prev[prev.length - 1] ? prev[prev.length - 1] + "." : "") + curr,
+    ],
+    []
+  );
+
+module.exports = {
+  chunk,
+  chunkBy,
+  intersect,
+  max,
+  min,
+  prefix,
+  sort,
+  sum,
+  sumIf,
+};
