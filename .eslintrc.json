@@ -1,0 +1,12 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "esint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ]
+}

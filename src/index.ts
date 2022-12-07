@@ -1,6 +1,7 @@
-const inquirer = require("inquirer");
-const { dirs } = require("./utils/fs");
-const { capitalize } = require("./utils/string");
+import "module-alias/register";
+import inquirer from "inquirer";
+import { dirs } from "@utils/filesystem";
+import { capitalize } from "@utils/string";
 
 function ask() {
   const days = dirs(__dirname, /^day\d+/).map(({ name: dirName }) => ({
@@ -16,8 +17,9 @@ function ask() {
         type: "list",
         name: "day",
         message: "Which day?",
-        choices: days,
-        default: days.length - 1,
+        choices: days.reverse(),
+        default: 0,
+        pageSize: days.length / 2,
       },
     ])
     .then(({ day }) => {
@@ -30,12 +32,12 @@ function ask() {
             name: "part",
             message: "Which part?",
             choices: [
-              { name: "Part 01", value: "part1" },
               { name: "Part 02", value: "part2" },
+              { name: "Part 01", value: "part1" },
               new inquirer.Separator(),
               { name: "Change day", value: "back" },
             ],
-            default: 1,
+            default: 0,
           },
         ])
         .then(({ part }) => {
@@ -46,11 +48,11 @@ function ask() {
             const solution = require(`${dayDir}`)[part]();
             const p2 = performance.now();
             console.log(
-              "\033[42m The solution is: \033[1m" +
+              "\u001b[42m The solution is: \u001b[1m" +
                 solution +
-                "\033[22m" +
+                "\u001b[22m" +
                 ` (took ${Math.ceil((p2 - p1) * 100) / 100} ms) ` +
-                "\033[0m"
+                "\u001b[0m"
             );
 
             inquirer

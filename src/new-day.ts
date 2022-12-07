@@ -1,31 +1,25 @@
-const fs = require("fs");
-const inquirer = require("inquirer");
+import fs from "fs";
+import inquirer from "inquirer";
 
 const todaysDay = new Intl.DateTimeFormat("fr-FR", { day: "2-digit" }).format(
   Date.now()
 );
 
-if (require.main === module) {
-  const dayDir = `${__dirname}/day${todaysDay}`;
-  if (fs.existsSync(dayDir)) {
-    console.log("Come back tomorrow");
-    return;
-  }
-
+const createDayDir = (dirname: string) => {
   const ui = new inquirer.ui.BottomBar();
 
   ui.log.write(`Starting day ${todaysDay} ☀️`);
   ui.log.write(new inquirer.Separator());
 
-  fs.mkdirSync(dayDir, { recursive: true, mode: 0o755 });
+  fs.mkdirSync(dirname, { recursive: true, mode: 0o755 });
   const files = {
     "example-input.txt": "",
-    "index.js": fs.readFileSync(`${__dirname}/stubs/index.js`),
-    "input.js": fs.readFileSync(`${__dirname}/stubs/input.js`),
+    "index.ts": fs.readFileSync(`${__dirname}/stubs/index.ts`),
+    "input.ts": fs.readFileSync(`${__dirname}/stubs/input.ts`),
     "input.txt": "",
   };
   Object.entries(files).forEach(([file, data]) => {
-    const filePath = `${dayDir}/${file}`;
+    const filePath = `${dirname}/${file}`;
     const stream = fs.createWriteStream(filePath);
     if (data !== "") {
       stream.write(data);
@@ -34,12 +28,20 @@ if (require.main === module) {
   });
 
   ui.log.write("Your files are ready at:");
-  ui.log.write(dayDir);
+  ui.log.write(dirname);
   Object.keys(files).forEach((file) => {
     ui.log.write(` - ${file}`);
   });
 
   ui.log.write("\nHave a nice day ✨");
+};
 
-  ui.close();
+if (require.main === module) {
+  const dayDir = `${__dirname}/day${todaysDay}`;
+
+  if (fs.existsSync(dayDir)) {
+    console.log("Come back tomorrow 🌒");
+  } else {
+    createDayDir(dayDir);
+  }
 }

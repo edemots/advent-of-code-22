@@ -1,5 +1,5 @@
-const { max, sum } = require("../utils/array");
-const { cleanInput } = require("./input");
+import { max, sum } from "@utils/array";
+import { cleanInput } from "./input";
 
 const calories = cleanInput(`${__dirname}/input.txt`).map((calories) =>
   sum(calories)

@@ -1,14 +1,15 @@
-const { max, multiply } = require("../utils/array");
-const { sum } = require("../utils/array");
-const { cleanInput } = require("./input");
+import { max, multiply } from "@utils/array";
+import { sum } from "@utils/array";
+import { cleanInput } from "./input";
 
-const rays = (grid, i, j) =>
+const rays = (grid: number[][], i: number, j: number) =>
   [
     [0, -1],
     [0, 1],
     [-1, 0],
     [1, 0],
-  ].reduce((rays, [v, h], index) => {
+  ].reduce<number[][]>((rays, [v, h], index) => {
+    let t: number;
     let [deltaI, deltaJ] = [i + v, j + h];
     rays[index] = [];
     while ((t = grid?.[deltaI]?.[deltaJ]) !== undefined) {
@@ -18,7 +19,7 @@ const rays = (grid, i, j) =>
     return rays;
   }, []);
 
-const part1 = () =>
+export const part1 = () =>
   sum(
     cleanInput(`${__dirname}/input.txt`).map(
       (row, rowIndex, trees) =>
@@ -32,14 +33,14 @@ const part1 = () =>
     )
   );
 
-const part2 = () =>
+export const part2 = () =>
   max(
     cleanInput(`${__dirname}/input.txt`).map((row, rowIndex, trees) =>
       max(
         row.map((tree, colIndex) =>
           multiply(
             rays(trees, rowIndex, colIndex).map((ray) =>
-              ray?.reduce((seen, t) => {
+              ray?.reduce((seen, t, _i, arr) => {
                 if (t >= tree) arr.splice(1);
                 return (seen += 1);
               }, 0)
@@ -49,5 +50,3 @@ const part2 = () =>
       )
     )
   );
-
-module.exports = { part1, part2 };

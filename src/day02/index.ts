@@ -1,8 +1,8 @@
-const { sum } = require("../utils/array");
-const { mod } = require("../utils/number");
-const { cleanInput } = require("./input");
+import { sum } from "@utils/array";
+import { mod } from "@utils/number";
+import { cleanInput } from "./input";
 
-const part1 = () =>
+export const part1 = () =>
   sum(
     cleanInput(`${__dirname}/input.txt`).map(
       ([opponentMove, myMove]) =>
@@ -34,7 +34,7 @@ const part1 = () =>
     )
   );
 
-const part2 = () =>
+export const part2 = () =>
   sum(
     cleanInput(`${__dirname}/input.txt`).map(
       ([opponentMove, expectedOutcome]) =>
@@ -61,5 +61,3 @@ const part2 = () =>
         mod(opponentMove + expectedOutcome, 3) + 1 + (expectedOutcome - 1) * 3
     )
   );
-
-module.exports = { part1, part2 };

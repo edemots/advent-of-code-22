@@ -1,16 +1,15 @@
-const { chunk, ints } = require("../utils/string");
-const { cleanInput } = require("./input");
+import { chunk, ints } from "@utils/string";
+import { cleanInput } from "./input";
 
-const stacksFrom = (drawing) => {
-  /** @type {string[][]} */
-  const stacks = [];
+const stacksFrom = (drawing: string) => {
+  const stacks: string[][] = [];
   drawing
     .split("\n")
     .reverse()
-    .map((line) => chunk(line, 4).map((s) => s[1]))
+    .map((line) => chunk(line, 4)?.map((s) => s[1]))
     .slice(1)
     .forEach((pile) => {
-      pile.forEach((crate, pos) => {
+      pile?.forEach((crate, pos) => {
         if (crate !== " ")
           stacks[pos + 1] = [...(stacks[pos + 1] || []), crate];
       });
@@ -19,28 +18,27 @@ const stacksFrom = (drawing) => {
   return stacks;
 };
 
-const topCrates = (stacks) =>
+const topCrates = (stacks: string[][]) =>
   stacks
     .filter(Boolean)
     .map((stack) => stack.pop())
     .join("");
 
-const part1 = () => {
+export const part1 = () => {
   const [drawing, procedure] = cleanInput(`${__dirname}/input.txt`);
   const stacks = stacksFrom(drawing);
 
   procedure.split("\n").forEach((move) => {
     const [count, from, to] = ints(move);
-    let i;
-    for (i = 0; i < count; i++) {
+    let crate: string | undefined;
+    for (let i = 0; i < count; i++)
       if ((crate = stacks[from].pop())) stacks[to].push(crate);
-    }
   });
 
   return topCrates(stacks);
 };
 
-const part2 = () => {
+export const part2 = () => {
   const [drawing, procedure] = cleanInput(`${__dirname}/input.txt`);
   const stacks = stacksFrom(drawing);
 
@@ -51,5 +49,3 @@ const part2 = () => {
 
   return topCrates(stacks);
 };
-
-module.exports = { part1, part2 };
