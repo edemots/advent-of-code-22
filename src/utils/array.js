@@ -47,6 +47,8 @@ const sum = (values) => values.reduce((acc, value) => acc + value, 0);
 const sumIf = (values, condition = (value) => value) =>
   sum(values.filter(condition));
 
+const multiply = (values) => values.reduce((acc, value) => acc * value, 1);
+
 /**
  *
  * @param {number[]} values
@@ -111,6 +113,7 @@ module.exports = {
   intersect,
   max,
   min,
+  multiply,
   prefix,
   sort,
   sum,
