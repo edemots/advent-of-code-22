@@ -1,23 +1,22 @@
 import { max, multiply } from "@utils/array";
 import { sum } from "@utils/array";
+import { V } from "@utils/vector";
 import { cleanInput } from "./input";
 
 const rays = (grid: number[][], i: number, j: number) =>
-  [
-    [0, -1],
-    [0, 1],
-    [-1, 0],
-    [1, 0],
-  ].reduce<number[][]>((rays, [v, h], index) => {
-    let t: number;
-    let [deltaI, deltaJ] = [i + v, j + h];
-    rays[index] = [];
-    while ((t = grid?.[deltaI]?.[deltaJ]) !== undefined) {
-      rays[index].push(t);
-      [deltaI, deltaJ] = [deltaI + v, deltaJ + h];
-    }
-    return rays;
-  }, []);
+  [V(0, -1), V(0, 1), V(-1, 0), V(1, 0)].reduce<number[][]>(
+    (rays, delta, index) => {
+      let t: number;
+      let vector = V(i, j).add(delta);
+      rays[index] = [];
+      while ((t = grid?.[vector.x]?.[vector.y]) !== undefined) {
+        rays[index].push(t);
+        vector.add(delta);
+      }
+      return rays;
+    },
+    []
+  );
 
 export const part1 = () =>
   sum(

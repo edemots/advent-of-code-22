@@ -70,3 +70,8 @@ export const prefix = (array: string[]) =>
     ],
     []
   );
+
+export const range = (start: number, end: number) =>
+  Array.from({ length: end - start + 1 }, (_, i) => i);
+
+export const tail = <T>(arr: T[]) => arr[arr.length - 1];
