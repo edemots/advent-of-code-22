@@ -6,10 +6,8 @@ const todaysDay = new Intl.DateTimeFormat("fr-FR", { day: "2-digit" }).format(
 );
 
 const createDayDir = (dirname: string) => {
-  const ui = new inquirer.ui.BottomBar();
-
-  ui.log.write(`Starting day ${todaysDay} ☀️`);
-  ui.log.write(new inquirer.Separator());
+  console.log(`Starting day ${todaysDay} ☀️`);
+  console.log(new inquirer.Separator().line);
 
   fs.mkdirSync(dirname, { recursive: true, mode: 0o755 });
   const files = {
@@ -27,13 +25,13 @@ const createDayDir = (dirname: string) => {
     stream.close();
   });
 
-  ui.log.write("Your files are ready at:");
-  ui.log.write(dirname);
+  console.log("Your files are ready at:");
+  console.log(dirname);
   Object.keys(files).forEach((file) => {
-    ui.log.write(` - ${file}`);
+    console.log(` - ${file}`);
   });
 
-  ui.log.write("\nHave a nice day ✨");
+  console.log("\nHave a nice day ✨");
 };
 
 if (require.main === module) {
