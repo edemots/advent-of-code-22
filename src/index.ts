@@ -24,6 +24,7 @@ function ask() {
     ])
     .then(({ day }) => {
       const dayDir = `${__dirname}/${day}`;
+      const dayFile = require(`${dayDir}`);
 
       inquirer
         .prompt([
@@ -40,18 +41,35 @@ function ask() {
             default: 0,
           },
         ])
-        .then(({ part }) => {
+        .then(async ({ part }: { part: string }) => {
           if (part === "back") {
             ask();
           } else {
+            let example = false;
+
+            if (day === "day14") {
+              example = (
+                await inquirer.prompt([
+                  {
+                    type: "confirm",
+                    name: "example",
+                    message: "Run example?",
+                    default: false,
+                  },
+                ])
+              ).example;
+            }
+
             const p1 = performance.now();
-            const solution = require(`${dayDir}`)[part]();
+            const solution = dayFile[part](example);
             const p2 = performance.now();
             console.log(
               "\u001b[42m The solution is: \u001b[1m" +
                 solution +
                 "\u001b[22m" +
-                ` (took ${Math.ceil((p2 - p1) * 100) / 100} ms) ` +
+                (part.endsWith("Example")
+                  ? " "
+                  : ` (took ${Math.ceil((p2 - p1) * 100) / 100} ms) `) +
                 "\u001b[0m"
             );
 
