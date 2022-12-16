@@ -10,4 +10,4 @@ export const chunk = (s: string, n: number) =>
   s.match(new RegExp(".{1," + n + "}", "g"));
 
 export const ints = (s: string) =>
-  s.match(/\d+/g)?.map((digit) => parseInt(digit)) || [];
+  s.match(/-?\d+/g)?.map((digit) => parseInt(digit)) || [];

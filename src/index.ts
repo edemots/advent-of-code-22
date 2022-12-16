@@ -1,9 +1,35 @@
 import "module-alias/register";
+import os from "os";
 import inquirer from "inquirer";
 import { dirs } from "@utils/filesystem";
-import { capitalize } from "@utils/string";
+import { capitalize, ints } from "@utils/string";
+import { tail } from "@utils/array";
 
-function ask() {
+const usageToTotalUsageMS = (elapUsage: NodeJS.CpuUsage) => {
+  const elapUserMS = elapUsage.user / 1000.0;
+  const elapSystMS = elapUsage.system / 1000.0;
+
+  return elapUserMS + elapSystMS;
+};
+
+const hrtimeToMS = (hrtime: [number, number]) =>
+  hrtime[0] * 1000.0 + hrtime[1] * Math.pow(10, -6);
+
+const bToMb = (b: number) => b * Math.pow(9.5367431640625, -7);
+
+const perf = (startTime: [number, number], startUsage: NodeJS.CpuUsage) => {
+  const elapTimeMS = hrtimeToMS(process.hrtime(startTime));
+  const elapUsageMS = usageToTotalUsageMS(process.cpuUsage(startUsage));
+  const cpuPercent = (
+    (100.0 * elapUsageMS) /
+    elapTimeMS /
+    os.cpus().length
+  ).toFixed(1);
+
+  return { elapTimeMS, cpuPercent };
+};
+
+const ask = () => {
   const days = dirs(__dirname, /^day\d+/).map(({ name: dirName }) => ({
     name: `${capitalize(dirName.substring(0, 3))} ${parseInt(
       dirName.substring(3)
@@ -47,7 +73,7 @@ function ask() {
           } else {
             let example = false;
 
-            if (day === "day14") {
+            if ([14, 15].includes(tail(ints(day)))) {
               example = (
                 await inquirer.prompt([
                   {
@@ -60,16 +86,29 @@ function ask() {
               ).example;
             }
 
-            const p1 = performance.now();
+            const startTime = process.hrtime();
+            const startUsage = process.cpuUsage();
+            const startMemUsage = process.memoryUsage.rss();
+
             const solution = dayFile[part](example);
-            const p2 = performance.now();
+
+            const { elapTimeMS: took, cpuPercent: cpu } = perf(
+              startTime,
+              startUsage
+            );
+            const elapMemUsageMB = bToMb(
+              process.memoryUsage.rss() - startMemUsage
+            );
+
             console.log(
               "\u001b[42m The solution is: \u001b[1m" +
                 solution +
                 "\u001b[22m" +
                 (part.endsWith("Example")
                   ? " "
-                  : ` (took ${Math.ceil((p2 - p1) * 100) / 100} ms) `) +
+                  : ` (took ${took.toFixed(1)} ms, avg cpu (${
+                      os.cpus().length
+                    }): ${cpu}%, avg mem: ${elapMemUsageMB.toFixed(1)} MB) `) +
                 "\u001b[0m"
             );
 
@@ -89,7 +128,7 @@ function ask() {
           }
         });
     });
-}
+};
 
 if (require.main === module) {
   ask();
