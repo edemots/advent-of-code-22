@@ -15,16 +15,12 @@ const usageToTotalUsageMS = (elapUsage: NodeJS.CpuUsage) => {
 const hrtimeToMS = (hrtime: [number, number]) =>
   hrtime[0] * 1000.0 + hrtime[1] * Math.pow(10, -6);
 
-const bToMb = (b: number) => b * Math.pow(9.5367431640625, -7);
+const bToMb = (b: number) => b / Math.pow(2, 20);
 
 const perf = (startTime: [number, number], startUsage: NodeJS.CpuUsage) => {
   const elapTimeMS = hrtimeToMS(process.hrtime(startTime));
   const elapUsageMS = usageToTotalUsageMS(process.cpuUsage(startUsage));
-  const cpuPercent = (
-    (100.0 * elapUsageMS) /
-    elapTimeMS /
-    os.cpus().length
-  ).toFixed(1);
+  const cpuPercent = ((100.0 * elapUsageMS) / elapTimeMS).toFixed(1);
 
   return { elapTimeMS, cpuPercent };
 };
@@ -88,7 +84,6 @@ const ask = () => {
 
             const startTime = process.hrtime();
             const startUsage = process.cpuUsage();
-            const startMemUsage = process.memoryUsage.rss();
 
             const solution = dayFile[part](example);
 
@@ -96,9 +91,7 @@ const ask = () => {
               startTime,
               startUsage
             );
-            const elapMemUsageMB = bToMb(
-              process.memoryUsage.rss() - startMemUsage
-            );
+            const memUsageMB = bToMb(process.memoryUsage().heapUsed);
 
             console.log(
               "\u001b[42m The solution is: \u001b[1m" +
@@ -108,7 +101,7 @@ const ask = () => {
                   ? " "
                   : ` (took ${took.toFixed(1)} ms, avg cpu (${
                       os.cpus().length
-                    }): ${cpu}%, avg mem: ${elapMemUsageMB.toFixed(1)} MB) `) +
+                    }): ${cpu}%, avg mem: ${memUsageMB.toFixed(1)} MB) `) +
                 "\u001b[0m"
             );
 
