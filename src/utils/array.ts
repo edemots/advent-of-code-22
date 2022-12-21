@@ -71,11 +71,11 @@ export const prefix = (array: string[]) =>
     []
   );
 
-export const range = (
+export const range = <T, V = number>(
   start: number,
   end: number,
   by: number = 1,
-  mapfn: (v: any, k: number) => any = (_, k) => k * by + start
+  mapfn: (v: T, k: number) => V = (_, k) => (k * by + start) as V
 ) =>
   end - start > 0 ? Array.from({ length: (end - start) / by + 1 }, mapfn) : [];
 
