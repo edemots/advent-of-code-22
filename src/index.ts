@@ -69,7 +69,7 @@ const ask = () => {
           } else {
             let example = false;
 
-            if ([14, 15].includes(tail(ints(day)))) {
+            if ([14, 15, 20].includes(tail(ints(day)))) {
               example = (
                 await inquirer.prompt([
                   {
